@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DapperExtensions;
 using SkyTrack.Common;
 using SkyTrack.ru.dpd.ws2;
 using System;
@@ -65,15 +66,11 @@ namespace SkyTrack.Bussiness
 
             try
             {
-                conn.Execute(Constants.UpdateStatePracels,
-                   new
-                   {
-                       docId = paracels.docId,
-                       docDate = paracels.docDate,
-                       clientNumber = paracels.clientNumber,
-                       resultComplete = paracels.resultComplete
-                   }, tran);
+                var predicate = Predicates.Field<stateParcel>(f => f.clientOrderNr, Operator.Eq, paracels.states.Select(p => p.clientOrderNr));
+                conn.Delete<stateParcel>(predicate, tran);
+                conn.Insert<stateParcel>(paracels.states, tran);
                 tran.Commit();
+                conn.Close();
                 return true;
             }
             catch (Exception ex)

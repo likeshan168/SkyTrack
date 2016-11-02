@@ -58,7 +58,7 @@ namespace SkyTrack
                 states = service.getStatesByClient(client);
                 Console.WriteLine("获取成功");
                 //save the parcles states into db
-                return DbOperation.Instance.UpdateStatesPracels(states);
+                return DbOperation.Instance.UpdateStatesPracel(states);
             }
             catch (Exception ex)
             {
